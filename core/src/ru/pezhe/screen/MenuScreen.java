@@ -25,6 +25,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        ship.resize(worldBounds);
     }
 
     @Override
@@ -32,6 +33,7 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
         batch.begin();
         background.draw(batch);
+        ship.calculatePosition();
         ship.draw(batch);
         batch.end();
     }
