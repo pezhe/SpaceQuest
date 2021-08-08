@@ -5,25 +5,27 @@ import com.badlogic.gdx.math.Vector2;
 import ru.pezhe.base.BaseScreen;
 import ru.pezhe.math.Rect;
 import ru.pezhe.sprite.Background;
+import ru.pezhe.sprite.Ship;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture bg;
+    private Texture bg, shipTexture;
     private Background background;
-
-    private Vector2 pos;
+    private Ship ship;
 
     @Override
     public void show() {
         super.show();
         bg = new Texture("textures/space.jpg");
+        shipTexture = new Texture("textures/ship.png");
         background = new Background(bg);
-        pos = new Vector2();
+        ship = new Ship(shipTexture);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        ship.resize(worldBounds);
     }
 
     @Override
@@ -31,6 +33,8 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
         batch.begin();
         background.draw(batch);
+        ship.calculatePosition();
+        ship.draw(batch);
         batch.end();
     }
 
@@ -38,10 +42,19 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         bg.dispose();
+        shipTexture.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
+        ship.touchDown(touch, pointer, button);
         return super.touchDown(touch, pointer, button);
     }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        ship.touchDragged(touch, pointer);
+        return super.touchDragged(touch, pointer);
+    }
+
 }
