@@ -1,9 +1,12 @@
 package ru.pezhe.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
 
 import ru.pezhe.base.Sprite;
 import ru.pezhe.math.Rect;
@@ -32,6 +35,11 @@ public class MainShip extends Sprite {
     private float bulletHeight;
     private int bulletDamage;
 
+    Sound shot;
+
+    Timer timer;
+    Timer.Task shooting;
+
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
@@ -40,27 +48,32 @@ public class MainShip extends Sprite {
         bulletV = new Vector2(0, 0.5f);
         bulletHeight = 0.01f;
         bulletDamage = 1;
+        shot = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        timer = new Timer();
+        timer.start();
+        shooting = new Timer.Task() {public void run() {shoot();}};
     }
 
     @Override
     public void update(float delta) {
+        if(timer.isEmpty()) timer.scheduleTask(shooting, 0.1f);
         super.update(delta);
         pos.mulAdd(v, delta);
-//        if (getRight() > worldBounds.getRight()) {
-//            setRight(worldBounds.getRight());
-//            stop();
-//        }
-//        if (getLeft() < worldBounds.getLeft()) {
-//            setLeft(worldBounds.getLeft());
-//            stop();
-//        }
+        if (getRight() > worldBounds.getRight()) {
+            setRight(worldBounds.getRight());
+            stop();
+        }
+        if (getLeft() < worldBounds.getLeft()) {
+            setLeft(worldBounds.getLeft());
+            stop();
+        }
 
-        if (getLeft() > worldBounds.getRight()) {
-            setRight(worldBounds.getLeft());
-        }
-        if (getRight() < worldBounds.getLeft()) {
-            setLeft(worldBounds.getRight());
-        }
+//        if (getLeft() > worldBounds.getRight()) {
+//            setRight(worldBounds.getLeft());
+//       }
+//        if (getRight() < worldBounds.getLeft()) {
+//            setLeft(worldBounds.getRight());
+//       }
     }
 
     @Override
@@ -145,7 +158,7 @@ public class MainShip extends Sprite {
                     stop();
                 }
                 break;
-            case Input.Keys.UP:
+            case Input.Keys.SPACE:
                 shoot();
                 break;
         }
@@ -168,5 +181,11 @@ public class MainShip extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bulletPos.set(pos.x, pos.y + getHalfHeight());
         bullet.set(this, bulletRegion, bulletPos, bulletV, bulletHeight, worldBounds, bulletDamage);
+        shot.play(1.0f);
     }
+
+    public void dispose() {
+        shot.dispose();
+    }
+
 }

@@ -1,5 +1,7 @@
 package ru.pezhe.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +16,8 @@ import ru.pezhe.sprite.Star;
 public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
+
+    Music music;
 
     private Texture bg;
     private Background background;
@@ -37,6 +41,10 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.setVolume(0.5f);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -63,6 +71,8 @@ public class GameScreen extends BaseScreen {
         bg.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        music.dispose();
+        mainShip.dispose();
     }
 
     @Override
