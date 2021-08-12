@@ -17,7 +17,7 @@ public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
 
-    Music music;
+    private Music music;
 
     private Texture bg;
     private Background background;

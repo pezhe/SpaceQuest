@@ -35,10 +35,10 @@ public class MainShip extends Sprite {
     private float bulletHeight;
     private int bulletDamage;
 
-    Sound shot;
+    private Sound shot;
 
-    Timer timer;
-    Timer.Task shooting;
+    private Timer timer;
+    private Timer.Task shooting;
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
