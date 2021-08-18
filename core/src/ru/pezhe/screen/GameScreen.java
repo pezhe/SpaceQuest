@@ -135,10 +135,14 @@ public class GameScreen extends BaseScreen {
             if (mainShip.pos.dst(enemyShip.pos) < minDist) {
                 enemyShip.destroy();
             }
-            for (Bullet bullet : bulletPool) {
-                if (bullet.getOwner() == mainShip && enemyShip.isBulletCollision(bullet)) {
-                    enemyShip.damage(bullet.getDamage());
-                    bullet.destroy();
+        }
+        for (Bullet bullet : bulletPool) {
+            if (bullet.getOwner() == mainShip) {
+                for (EnemyShip enemyShip : enemyPool) {
+                    if (enemyShip.isBulletCollision(bullet)) {
+                        enemyShip.damage(bullet.getDamage());
+                        bullet.destroy();
+                    }
                 }
             }
         }
