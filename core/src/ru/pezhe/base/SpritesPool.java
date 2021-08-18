@@ -3,12 +3,18 @@ package ru.pezhe.base;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public abstract class SpritesPool<T extends Sprite> {
+public abstract class SpritesPool<T extends Sprite> implements Iterable<T> {
 
     protected final List<T> activeSprites = new ArrayList<>();
     protected final List<T> freeSprites = new ArrayList<>();
+
+    @Override
+    public Iterator<T> iterator() {
+        return activeSprites.iterator();
+    }
 
     protected abstract T newSprite();
 

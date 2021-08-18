@@ -7,11 +7,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.pezhe.base.BaseScreen;
 import ru.pezhe.math.Rect;
 import ru.pezhe.pool.BulletPool;
 import ru.pezhe.pool.EnemyPool;
 import ru.pezhe.sprite.Background;
+import ru.pezhe.sprite.Bullet;
+import ru.pezhe.sprite.EnemyShip;
 import ru.pezhe.sprite.MainShip;
 import ru.pezhe.sprite.Star;
 import ru.pezhe.utils.EnemyEmitter;
@@ -126,7 +130,18 @@ public class GameScreen extends BaseScreen {
     }
 
     private void checkCollisions() {
-
+        for (EnemyShip enemyShip : enemyPool) {
+            float minDist = enemyShip.getHalfWidth() + mainShip.getHalfWidth();
+            if (mainShip.pos.dst(enemyShip.pos) < minDist) {
+                enemyShip.destroy();
+            }
+            for (Bullet bullet : bulletPool) {
+                if (bullet.getOwner() == mainShip && enemyShip.isBulletCollision(bullet)) {
+                    enemyShip.damage(bullet.getDamage());
+                    bullet.destroy();
+                }
+            }
+        }
     }
 
     private void freeAllDestroyed() {

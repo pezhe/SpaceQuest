@@ -55,4 +55,22 @@ public class EnemyShip extends Ship {
         v.set(0, -0.4f);
         bulletPos.set(pos.x, pos.y + getHalfHeight());
     }
+
+    public boolean isBulletCollision(Bullet bullet) {
+        return !(
+                bullet.getRight() < getLeft()
+                        || bullet.getLeft() > getRight()
+                        || bullet.getBottom() > getTop()
+                        || bullet.getTop() < pos.y
+        );
+    }
+
+    public void damage(int damage) {
+        hp -= damage;
+        if (hp <= 0) {
+            hp = 0;
+            destroy();
+        }
+    }
+
 }
